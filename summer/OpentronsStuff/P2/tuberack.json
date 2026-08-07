@@ -1,0 +1,245 @@
+{
+  "ordering": [
+    ["A1", "B1", "C1","D1"],
+    ["A2", "B2", "C2","D2"],
+    ["A3", "B3", "C3","D3"],
+    ["A4", "B4", "C4"],
+    ["A5", "B5", "C5"]
+  ],
+  "schemaVersion": 2,
+  "version": 1,
+  "namespace": "custom_beta",
+  "metadata": {
+    "displayName": "Tube Rack with Eppendorf 12x2 mL, Falcon 6x15 mL Conical",
+    "displayCategory": "tubeRack",
+    "displayVolumeUnits": "mL",
+    "tags": []
+  },
+  "dimensions": {
+    "xDimension": 127.75,
+    "yDimension": 85.5,
+    "zDimension": 124.35
+  },
+  "parameters": {
+    "format": "irregular",
+    "isTiprack": false,
+    "isMagneticModuleCompatible": false,
+    "loadName": "tuberack_eppendorf_12x2ml_falcon_6x15ml_conical"
+  },
+  "wells": {
+    "D1": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 18.21,
+      "y": 17.59,
+      "z": 41.27
+    },
+    "C1": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 18.21,
+      "y": 36.87,
+      "z": 41.27
+    },
+    "B1": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 18.21,
+      "y": 56.15,
+      "z": 41.27
+    },
+    "A1": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 18.21,
+      "y": 75.43,
+      "z": 41.27
+    },
+    "D2": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 38.1,
+      "y": 17.59,
+      "z": 41.27
+    },
+    "C2": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 38.1,
+      "y": 36.87,
+      "z": 41.27
+    },
+    "B2": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 38.1,
+      "y": 56.15,
+      "z": 41.27
+    },
+    "A2": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 38.1,
+      "y": 75.43,
+      "z": 41.27
+    },
+    "D3": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 57.99,
+      "y": 17.59,
+      "z": 41.27
+    },
+    "C3": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 57.99,
+      "y": 36.87,
+      "z": 41.27
+    },
+    "B3": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 57.99,
+      "y": 56.15,
+      "z": 41.27
+    },
+    "A3": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 57.99,
+      "y": 75.43,
+      "z": 41.27
+    },
+    "A4": {
+      "depth": 117.5,
+      "diameter": 14.9,
+      "shape": "circular",
+      "totalLiquidVolume": 15000,
+      "x": 88.88,
+      "y": 67.74,
+      "z": 6.85
+    },
+    "B4": {
+      "depth": 117.5,
+      "diameter": 14.9,
+      "shape": "circular",
+      "totalLiquidVolume": 15000,
+      "x": 88.88,
+      "y": 42.74,
+      "z": 6.85
+    },
+    "C4": {
+      "depth": 117.5,
+      "diameter": 14.9,
+      "shape": "circular",
+      "totalLiquidVolume": 15000,
+      "x": 88.88,
+      "y": 17.74,
+      "z": 6.85  
+    },
+    "C5": {
+      "depth": 117.5,
+      "diameter": 14.9,
+      "shape": "circular",
+      "totalLiquidVolume": 15000,
+      "x": 113.88,
+      "y": 17.74,
+      "z": 6.85
+    },
+    "B5": {
+      "depth": 117.5,
+      "diameter": 14.9,
+      "shape": "circular",
+      "totalLiquidVolume": 15000,
+      "x": 113.88,
+      "y": 42.74,
+      "z": 6.85
+    },
+    "A5": {
+      "depth": 117.5,
+      "diameter": 14.9,
+      "shape": "circular",
+      "totalLiquidVolume": 15000,
+      "x": 113.88,
+      "y": 67.74,
+      "z": 6.85
+    }
+  },
+  "brand": {
+    "brand": "Opentrons",
+    "brandId": [],
+    "links": [
+    ]
+  },
+  "groups": [
+    {
+      "wells": ["A1", "B1", "C1", "D1", "A2", "B2", "C2", "D2", "A3", "B3", "C3", "D3"],
+      "metadata": {
+        "displayName": "Eppendorf 12x2 mL Safelock Snapcap",
+        "displayCategory": "tubeRack",
+        "wellBottomShape": "u"
+      },
+      "brand": {
+        "brand": "Eppendorf",
+        "brandId": [
+          "022363344",
+          "022363352",
+          "022363379",
+          "022363395",
+          "022363417",
+          "022363433",
+          "022363450",
+          "022363476"
+        ],
+        "links": [
+          "https://online-shop.eppendorf.us/US-en/Laboratory-Consumables-44512/Tubes-44515/Eppendorf-Safe-Lock-Tubes-PF-8863.html"
+        ]
+      }
+    },
+    {
+      "wells": ["A4", "B4", "C4", "A5", "B5", "C5"],
+      "metadata": {
+        "displayName": "Falcon 6x15 mL Conical",
+        "displayCategory": "tubeRack",
+        "wellBottomShape": "v"
+      },
+      "brand": {
+        "brand": "Falcon",
+        "brandId":  ["352095", "352096", "352097", "352099", "352196"],
+        "links": [
+          "https://ecatalog.corning.com/life-sciences/b2c/US/en/Liquid-Handling/Tubes,-Liquid-Handling/Centrifuge-Tubes/Falcon%C2%AE-Conical-Centrifuge-Tubes/p/falconConicalTubes"
+        ]
+      }
+    }
+  ],
+  "cornerOffsetFromSlot": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  }
+}
