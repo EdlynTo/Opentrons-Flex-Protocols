@@ -22,6 +22,7 @@
   },
   "parameters": {
     "format": "irregular",
+    "quirks": [],
     "isTiprack": false,
     "isMagneticModuleCompatible": false,
     "loadName": "tuberack_eppendorf_12x2ml_falcon_6x15ml_conical"
@@ -202,7 +203,7 @@
       "metadata": {
         "displayName": "Eppendorf 12x2 mL Safelock Snapcap",
         "displayCategory": "tubeRack",
-        "wellBottomShape": "u"
+        "wellBottomShape": "v"
       },
       "brand": {
         "brand": "Eppendorf",
@@ -215,9 +216,6 @@
           "022363433",
           "022363450",
           "022363476"
-        ],
-        "links": [
-          "https://online-shop.eppendorf.us/US-en/Laboratory-Consumables-44512/Tubes-44515/Eppendorf-Safe-Lock-Tubes-PF-8863.html"
         ]
       }
     },
@@ -230,10 +228,7 @@
       },
       "brand": {
         "brand": "Falcon",
-        "brandId":  ["352095", "352096", "352097", "352099", "352196"],
-        "links": [
-          "https://ecatalog.corning.com/life-sciences/b2c/US/en/Liquid-Handling/Tubes,-Liquid-Handling/Centrifuge-Tubes/Falcon%C2%AE-Conical-Centrifuge-Tubes/p/falconConicalTubes"
-        ]
+        "brandId":  ["352095", "352096", "352097", "352099", "352196"]
       }
     }
   ],
