@@ -1,0 +1,461 @@
+{
+  "ordering": [
+    ["A1", "B1", "C1", "D1"],
+    ["A2", "B2", "C2", "D2"],
+    ["A3", "B3", "C3", "D3"],
+    ["A4", "B4", "C4"],
+    ["A5", "B5", "C5"]
+  ],
+  "schemaVersion": 2,
+  "version": 1,
+  "namespace": "custom_beta",
+  "metadata": {
+    "displayName": "Tube Rack with Eppendorf 12x2 mL, Falcon 6x15 mL Conical",
+    "displayCategory": "tubeRack",
+    "displayVolumeUnits": "mL",
+    "tags": []
+  },
+  "dimensions": {
+    "xDimension": 127.75,
+    "yDimension": 85.5,
+    "zDimension": 124.35
+  },
+  "parameters": {
+    "format": "irregular",
+    "quirks": [],
+    "isTiprack": false,
+    "isMagneticModuleCompatible": false,
+    "loadName": "tuberack_eppendorf_12x2ml_falcon_6x15ml_conical_v2"
+  },
+  "wells": {
+    "D1": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 18.21,
+      "y": 17.59,
+      "z": 41.27,
+      "geometryDefinitionId": "eppendorf2mlWell"
+    },
+    "C1": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 18.21,
+      "y": 36.87,
+      "z": 41.27,
+      "geometryDefinitionId": "eppendorf2mlWell"
+    },
+    "B1": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 18.21,
+      "y": 56.15,
+      "z": 41.27,
+      "geometryDefinitionId": "eppendorf2mlWell"
+    },
+    "A1": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 18.21,
+      "y": 75.43,
+      "z": 41.27,
+      "geometryDefinitionId": "eppendorf2mlWell"
+    },
+
+    "D2": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 38.1,
+      "y": 17.59,
+      "z": 41.27,
+      "geometryDefinitionId": "eppendorf2mlWell"
+    },
+    "C2": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 38.1,
+      "y": 36.87,
+      "z": 41.27,
+      "geometryDefinitionId": "eppendorf2mlWell"
+    },
+    "B2": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 38.1,
+      "y": 56.15,
+      "z": 41.27,
+      "geometryDefinitionId": "eppendorf2mlWell"
+    },
+    "A2": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 38.1,
+      "y": 75.43,
+      "z": 41.27,
+      "geometryDefinitionId": "eppendorf2mlWell"
+    },
+
+    "D3": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 57.99,
+      "y": 17.59,
+      "z": 41.27,
+      "geometryDefinitionId": "eppendorf2mlWell"
+    },
+    "C3": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 57.99,
+      "y": 36.87,
+      "z": 41.27,
+      "geometryDefinitionId": "eppendorf2mlWell"
+    },
+    "B3": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 57.99,
+      "y": 56.15,
+      "z": 41.27,
+      "geometryDefinitionId": "eppendorf2mlWell"
+    },
+    "A3": {
+      "depth": 39.1,
+      "diameter": 8.8,
+      "shape": "circular",
+      "totalLiquidVolume": 2000,
+      "x": 57.99,
+      "y": 75.43,
+      "z": 41.27,
+      "geometryDefinitionId": "eppendorf2mlWell"
+    },
+
+    "A4": {
+      "depth": 117.5,
+      "diameter": 14.9,
+      "shape": "circular",
+      "totalLiquidVolume": 15000,
+      "x": 88.88,
+      "y": 67.74,
+      "z": 6.85,
+      "geometryDefinitionId": "falcon15mlWell"
+    },
+    "B4": {
+      "depth": 117.5,
+      "diameter": 14.9,
+      "shape": "circular",
+      "totalLiquidVolume": 15000,
+      "x": 88.88,
+      "y": 42.74,
+      "z": 6.85,
+      "geometryDefinitionId": "falcon15mlWell"
+    },
+    "C4": {
+      "depth": 117.5,
+      "diameter": 14.9,
+      "shape": "circular",
+      "totalLiquidVolume": 15000,
+      "x": 88.88,
+      "y": 17.74,
+      "z": 6.85,
+      "geometryDefinitionId": "falcon15mlWell"
+    },
+
+    "C5": {
+      "depth": 117.5,
+      "diameter": 14.9,
+      "shape": "circular",
+      "totalLiquidVolume": 15000,
+      "x": 113.88,
+      "y": 17.74,
+      "z": 6.85,
+      "geometryDefinitionId": "falcon15mlWell"
+    },
+    "B5": {
+      "depth": 117.5,
+      "diameter": 14.9,
+      "shape": "circular",
+      "totalLiquidVolume": 15000,
+      "x": 113.88,
+      "y": 42.74,
+      "z": 6.85,
+      "geometryDefinitionId": "falcon15mlWell"
+    },
+    "A5": {
+      "depth": 117.5,
+      "diameter": 14.9,
+      "shape": "circular",
+      "totalLiquidVolume": 15000,
+      "x": 113.88,
+      "y": 67.74,
+      "z": 6.85,
+      "geometryDefinitionId": "falcon15mlWell"
+    }
+  },
+
+  "brand": {
+    "brand": "Opentrons",
+    "brandId": [],
+    "links": []
+  },
+
+  "groups": [
+    {
+      "wells": [
+        "A1",
+        "B1",
+        "C1",
+        "D1",
+        "A2",
+        "B2",
+        "C2",
+        "D2",
+        "A3",
+        "B3",
+        "C3",
+        "D3"
+      ],
+      "metadata": {
+        "displayName": "Eppendorf 12x2 mL Safelock Snapcap",
+        "displayCategory": "tubeRack",
+        "wellBottomShape": "u"
+      },
+      "brand": {
+        "brand": "Eppendorf",
+        "brandId": [
+          "022363344",
+          "022363352",
+          "022363379",
+          "022363395",
+          "022363417",
+          "022363433",
+          "022363450",
+          "022363476"
+        ]
+      }
+    },
+    {
+      "wells": [
+        "A4",
+        "B4",
+        "C4",
+        "A5",
+        "B5",
+        "C5"
+      ],
+      "metadata": {
+        "displayName": "Falcon 6x15 mL Conical",
+        "displayCategory": "tubeRack",
+        "wellBottomShape": "v"
+      },
+      "brand": {
+        "brand": "Falcon",
+        "brandId": [
+          "352095",
+          "352096",
+          "352097",
+          "352099",
+          "352196"
+        ]
+      }
+    }
+  ],
+
+  "cornerOffsetFromSlot": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+
+  "innerLabwareGeometry": {
+    "eppendorf2mlWell": {
+      "sections": [
+        {
+          "shape": "conical",
+          "topDiameter": 10.0,
+          "bottomDiameter": 9.6,
+          "topHeight": 39.02,
+          "bottomHeight": 33.96
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 9.6,
+          "bottomDiameter": 9.2,
+          "topHeight": 33.96,
+          "bottomHeight": 32.5
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 9.2,
+          "bottomDiameter": 9.1,
+          "topHeight": 32.5,
+          "bottomHeight": 25.26
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 9.1,
+          "bottomDiameter": 9.0,
+          "topHeight": 25.26,
+          "bottomHeight": 13.32
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 9.0,
+          "bottomDiameter": 8.9,
+          "topHeight": 13.32,
+          "bottomHeight": 10.17
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 8.9,
+          "bottomDiameter": 8.78,
+          "topHeight": 10.17,
+          "bottomHeight": 6.97
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 8.78,
+          "bottomDiameter": 8.6,
+          "topHeight": 6.97,
+          "bottomHeight": 5.43
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 8.6,
+          "bottomDiameter": 8.5,
+          "topHeight": 5.43,
+          "bottomHeight": 5.15
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 8.5,
+          "bottomDiameter": 8.4,
+          "topHeight": 5.15,
+          "bottomHeight": 5.03
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 8.4,
+          "bottomDiameter": 8.2,
+          "topHeight": 5.03,
+          "bottomHeight": 4.53
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 8.2,
+          "bottomDiameter": 8.0,
+          "topHeight": 4.53,
+          "bottomHeight": 4.29
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 8.0,
+          "bottomDiameter": 7.7,
+          "topHeight": 4.29,
+          "bottomHeight": 3.93
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 7.7,
+          "bottomDiameter": 7.6,
+          "topHeight": 3.93,
+          "bottomHeight": 3.67
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 7.6,
+          "bottomDiameter": 7.2,
+          "topHeight": 3.67,
+          "bottomHeight": 3.14
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 7.2,
+          "bottomDiameter": 6.8,
+          "topHeight": 3.14,
+          "bottomHeight": 2.75
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 6.8,
+          "bottomDiameter": 6.4,
+          "topHeight": 2.75,
+          "bottomHeight": 2.45
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 6.4,
+          "bottomDiameter": 6.0,
+          "topHeight": 2.45,
+          "bottomHeight": 2.2
+        },
+        {
+          "shape": "conical",
+          "topDiameter": 6.0,
+          "bottomDiameter": 5.0,
+          "topHeight": 2.2,
+          "bottomHeight": 1.45
+        },
+        {
+          "shape": "spherical",
+          "radiusOfCurvature": 2.88,
+          "topHeight": 1.45,
+          "bottomHeight": 0.0
+        }
+      ]
+    },
+
+    "falcon15mlWell": {
+      "sections": [
+        {
+          "shape": "conical",
+          "bottomDiameter": 14.5,
+          "topDiameter": 14.7,
+          "topHeight": 118.2,
+          "bottomHeight": 108.6
+        },
+        {
+          "shape": "conical",
+          "bottomDiameter": 13.5,
+          "topDiameter": 14.5,
+          "topHeight": 108.6,
+          "bottomHeight": 20.7
+        },
+        {
+          "shape": "conical",
+          "bottomDiameter": 4,
+          "topDiameter": 13.5,
+          "topHeight": 20.7,
+          "bottomHeight": 0.8
+        },
+        {
+          "shape": "spherical",
+          "radiusOfCurvature": 2.9,
+          "topHeight": 0.8,
+          "bottomHeight": 0.0
+        }
+      ]
+    }
+  }
+}

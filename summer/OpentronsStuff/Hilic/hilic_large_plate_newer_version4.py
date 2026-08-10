@@ -229,7 +229,7 @@ def run(protocol: protocol_api.ProtocolContext):
             "final solution rack",
         )
     initial_tube_rack = protocol.load_labware(
-        "tuberack_eppendorf_12x2ml_falcon_6x15ml_conical", "C2", "initial solution rack"
+        "tuberack_eppendorf_12x2ml_falcon_6x15ml_conical_v2", "C2", "initial solution rack"
         # "opentrons_24_tuberack_2000ul", "C2", "initial solution rack"
     )
     # lid = protocol.load_lid_stack(
