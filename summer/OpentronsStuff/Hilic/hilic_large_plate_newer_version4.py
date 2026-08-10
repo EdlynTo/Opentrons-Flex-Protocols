@@ -332,7 +332,7 @@ def run(protocol: protocol_api.ProtocolContext):
         else:
             pipette.drop_tip(chute)        
 
-    def aspirate_spuernatent_to_trash(
+    def aspirate_supernatent_to_trash(
         pipette, amt, speed=0.05, discard_tip=True, height=0.5
     ):
         """amt: amount ot aspirirate out"""
@@ -839,7 +839,7 @@ def run(protocol: protocol_api.ProtocolContext):
     # protocol.delay(
     #     seconds=bead_settle_time + 5, msg="waiting for beads to settle (20 sec)"
     # )
-    # aspirate_spuernatent_to_trash(
+    # aspirate_supernatent_to_trash(
     #     right_pipette, wash_volume, discard_tip=False
     # )
     
@@ -883,7 +883,7 @@ def run(protocol: protocol_api.ProtocolContext):
     hs_mod.open_labware_latch()
     protocol.move_labware(reagent_plate, magnetic_block, use_gripper=True)
     protocol.delay(seconds=bead_settle_time, msg="waiting for beads to settle (20 sec)")
-    aspirate_spuernatent_to_trash(right_pipette, wash_volume - 15)
+    aspirate_supernatent_to_trash(right_pipette, wash_volume - 15)
 
     protocol.comment(
         "\nResuspend beads in "
@@ -939,11 +939,11 @@ def run(protocol: protocol_api.ProtocolContext):
             seconds=bead_settle_time, msg="waiting for beads to settle"
         )
         if wash_num == num_washes - 1:  # last wash
-            aspirate_spuernatent_to_trash(
+            aspirate_supernatent_to_trash(
                 right_pipette, wash_buffer_resuspend_amt + 10
             )
         elif wash_num == 0:  # first wash
-            aspirate_spuernatent_to_trash(
+            aspirate_supernatent_to_trash(
                 right_pipette, wash_buffer_resuspend_amt + 10
             )
 
@@ -988,7 +988,7 @@ def run(protocol: protocol_api.ProtocolContext):
 
     remove_tip(left_pipette)
 
-    # aspirate_spuernatent_to_trash(right_pipette, wash_buffer_resuspend_amt)
+    # aspirate_supernatent_to_trash(right_pipette, wash_buffer_resuspend_amt)
 
     # DO THE MATH AND FIX THIS PART LATER
     pick_up(right_pipette)
