@@ -7,7 +7,7 @@ import time
 from datetime import datetime
 
 metadata = {
-    "protocolName": "SP3 HILIC protocol - V3",
+    "protocolName": "SP3 HILIC protocol- V4",
     "author": "Nico / Calvin / Edlyn",
     "description": "HILIC SP3 protocol large plate Aug 2026.",
 }
@@ -21,7 +21,7 @@ def add_parameters(parameters: protocol_api.Parameters):
         variable_name="numSamples",
         display_name="Number of Samples",
         description="Number of samples",
-        default=8,
+        default=96,
         minimum=1,
         maximum=96,
         unit="samples",
@@ -228,8 +228,9 @@ def run(protocol: protocol_api.ProtocolContext):
             "B1",
             "final solution rack",
         )
-    falcon_tube_rack = protocol.load_labware(
-        "opentrons_10_tuberack_falcon_4x50ml_6x15ml_conical", "C2", "falcon rack"
+    initial_tube_rack = protocol.load_labware(
+        "tuberack_eppendorf_12x2ml_falcon_6x15ml_conical", "C2", "initial solution rack"
+        # "opentrons_24_tuberack_2000ul", "C2", "initial solution rack"
     )
     # lid = protocol.load_lid_stack(
     #     load_name="opentrons_tough_pcr_auto_sealing_lid", location="C3", quantity=1
@@ -263,18 +264,18 @@ def run(protocol: protocol_api.ProtocolContext):
     empty_trash_storage = protocol.define_liquid("Trash", "Trash (starts empty)", "#ffffff")
     
     # Loading Liquids
-    falcon_tube_rack["A1"].load_liquid(bead_sol, bead_amt * num_samples + 200)
-    bead_storage = falcon_tube_rack["A1"]
-    dtt_stock_storage = falcon_tube_rack["B1"]
-    iaa_stock_storage = falcon_tube_rack["C1"]
+    initial_tube_rack["A1"].load_liquid(bead_sol, bead_amt * num_samples + 200)
+    bead_storage = initial_tube_rack["A1"]
+    dtt_stock_storage = initial_tube_rack["B1"]
+    iaa_stock_storage = initial_tube_rack["C1"]
     formic_acid_storage = working_reagent_reservoir["A1"]
     formic_acid_storage.load_liquid(formic_acid, 10*num_samples + 1000)
-    falcon_tube_rack["A2"].load_liquid(
+    initial_tube_rack["A4"].load_liquid(
         digestion_buffer, digestion_buffer_per_sample_amt * num_samples + 50 * 8
     )
-    dig_buffer_location = falcon_tube_rack["A2"]
-    binding_stock_buffer_storage = falcon_tube_rack["B3"]
-    wash_stock_buffer_storage = falcon_tube_rack["B4"]
+    dig_buffer_location = initial_tube_rack["A4"]
+    binding_stock_buffer_storage = initial_tube_rack["B3"]
+    wash_stock_buffer_storage = initial_tube_rack["B4"]
 
     binding_buffer_storage = [
         working_reagent_reservoir["A4"],
@@ -556,6 +557,13 @@ def run(protocol: protocol_api.ProtocolContext):
                     dispense_start_location = bead_storage.meniscus(z=-1, target="end"),
                     rate = 0.5
                 )
+                # left_pipette.mix(
+                #     repetitions = 3,
+                #     volume = min(200, bead_amt_mix),
+                #     location = bead_storage.bottom(z=1),
+                #     rate = 0.5,
+                #     final_push_out = 20
+                # )
                 left_pipette.blow_out(bead_storage)
             transfer_large_amt(
                 amt_in_well,
@@ -646,7 +654,7 @@ def run(protocol: protocol_api.ProtocolContext):
             dtt_working_stock_conc * dtt_working_vol
         ) / dtt_conc  # amt of stock that needs to be transfered to create working dtt solution
 
-        falcon_tube_rack["B1"].load_liquid(dtt_stock, dtt_stock_vol)
+        initial_tube_rack["B1"].load_liquid(dtt_stock, dtt_stock_vol)
         dtt_working_storage = dtt_stock_storage
 
         pick_up(left_pipette)
@@ -709,7 +717,7 @@ def run(protocol: protocol_api.ProtocolContext):
             iaa_working_stock_conc * iaa_working_vol
         ) / iaa_conc  # amt of stock that needs to be transfered to create working dtt solution
         iaa_working_storage = iaa_stock_storage
-        falcon_tube_rack["C1"].load_liquid(iaa_stock, iaa_stock_vol)
+        initial_tube_rack["C1"].load_liquid(iaa_stock, iaa_stock_vol)
 
         pick_up(left_pipette)
         for i in range(0, 8):
@@ -949,6 +957,7 @@ def run(protocol: protocol_api.ProtocolContext):
     protocol.comment(
         "Resuspending microparticles with protein in 100 digestion buffer"
     )
+    # protocol.pause("Add trypsin/digestion buffer to A2 in Slot C2.")
 
 
 
