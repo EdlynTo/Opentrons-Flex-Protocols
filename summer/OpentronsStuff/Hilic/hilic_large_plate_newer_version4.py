@@ -230,11 +230,8 @@ def run(protocol: protocol_api.ProtocolContext):
         )
     initial_tube_rack = protocol.load_labware(
         "tuberack_eppendorf_12x2ml_falcon_6x15ml_conical_v2", "C2", "initial solution rack"
-        # "opentrons_24_tuberack_2000ul", "C2", "initial solution rack"
     )
-    # lid = protocol.load_lid_stack(
-    #     load_name="opentrons_tough_pcr_auto_sealing_lid", location="C3", quantity=1
-    # )
+
     lid = protocol.load_lid_stack(
         load_name="opentrons_tough_universal_lid", location="C3", quantity=1
     )
@@ -831,18 +828,6 @@ def run(protocol: protocol_api.ProtocolContext):
         remove_tip(right_pipette)
     check_tips()
 
-    # protocol.comment(
-    #     "\nPlacing tube on magnetic separator and allowing 10s for microparticles to clear"
-    # )
-    # hs_mod.open_labware_latch()
-    # protocol.move_labware(reagent_plate, magnetic_block, use_gripper=True)
-    # protocol.delay(
-    #     seconds=bead_settle_time + 5, msg="waiting for beads to settle (20 sec)"
-    # )
-    # aspirate_supernatent_to_trash(
-    #     right_pipette, wash_volume, discard_tip=False
-    # )
-    
     hs_mod.open_labware_latch()
     protocol.move_labware(reagent_plate, hs_mod, use_gripper=True)
     hs_mod.close_labware_latch()
