@@ -52,7 +52,7 @@ def add_parameters(parameters):
                                {"display_name": "Slot A1", "value": 0},
                                {"display_name": "Slot B1", "value": 1},
                                {"display_name": "Slot B2", "value": 2},
-                               {"display_name": "Slot C2", "value": 3},
+                               {"display_name": "Slot D2", "value": 3},
                                {"display_name": "Slot B3", "value": 4},
                                {"display_name": "Slot C3", "value": 5}
                                ]
@@ -74,7 +74,7 @@ def add_parameters(parameters):
                                {"display_name": "Slot A1", "value": 0},
                                {"display_name": "Slot B1", "value": 1},
                                {"display_name": "Slot B2", "value": 2},
-                               {"display_name": "Slot C2", "value": 3},
+                               {"display_name": "Slot D2", "value": 3},
                                {"display_name": "Slot B3", "value": 4},
                                {"display_name": "Slot C3", "value": 5}
                                ]
@@ -82,7 +82,7 @@ def add_parameters(parameters):
     parameters.add_str(variable_name="labware_rinse",
                        display_name="Solvent B Labware",
                        description="If rinsing Evotips with Solvent B......",
-                       default='nest_1_reservoir_195ml',
+                       default='',
                        choices=[
                                {"display_name": "N/A", "value": ''},
                                {"display_name": "195mL Reservoir", "value": 'nest_1_reservoir_195ml'},
@@ -92,13 +92,13 @@ def add_parameters(parameters):
     parameters.add_int(variable_name="slot_rinse",
                        display_name="Solvent B Location",
                        description="If rinsing Evotips with Solvent B......",
-                       default=2,
+                       default=-1,
                        choices=[
                                {"display_name": "N/A", "value": -1},
                                {"display_name": "Slot A1", "value": 0},
                                {"display_name": "Slot B1", "value": 1},
                                {"display_name": "Slot B2", "value": 2},
-                               {"display_name": "Slot C2", "value": 3},
+                               {"display_name": "Slot D2", "value": 3},
                                {"display_name": "Slot B3", "value": 4},
                                {"display_name": "Slot C3", "value": 5}
                                ]
@@ -119,7 +119,7 @@ def add_parameters(parameters):
                                {"display_name": "Slot A1", "value": 0},
                                {"display_name": "Slot B1", "value": 1},
                                {"display_name": "Slot B2", "value": 2},
-                               {"display_name": "Slot C2", "value": 3},
+                               {"display_name": "Slot D2", "value": 3},
                                {"display_name": "Slot B3", "value": 4},
                                {"display_name": "Slot C3", "value": 5}
                                ]
@@ -173,7 +173,7 @@ def run(ctx):
     else: h_tip_in_well = -43
 
 
-    open_slot = ['A1', 'B1', 'B2', 'C2', 'B3', 'C3']
+    open_slot = ['A1', 'B1', 'B2', 'D2', 'B3', 'C3']
 
     sample_plate = ctx.load_labware(labware_sample, open_slot[slot_sample], 'Samples')
     sample = sample_plate.wells()[0]
@@ -191,26 +191,45 @@ def run(ctx):
     elif type_dumpster == 2: ctx.load_waste_chute()
 
 
-    evotips_adapter = ctx.load_adapter('ev_resin_tips_flex_96_tiprack_adapter', 'D2')
+    evotips_adapter = ctx.load_adapter('ev_resin_tips_flex_96_tiprack_adapter', 'C2')
     evosep_tips_labware = evotips_adapter.load_labware('ev_resin_tips_flex_96_labware', 'Evotips')
     evotip = evosep_tips_labware.wells()[0]
 
 
     if slot_rinse != -1 and labware_rinse != '':
-        tipbox_slot = ['A1', 'A2', 'A3']
+        tipbox_slot = ['A1', 'A2', 'C3']
     else:
         tipbox_slot = ['A1', 'A2']
 
-    tips_200 = ctx.load_labware('opentrons_flex_96_tiprack_200ul', 'C3', '200uL tips')
+    tips_200 = ctx.load_labware('opentrons_flex_96_tiprack_200ul', 'A3', '200uL tips')
     tips_50 = [ctx.load_labware('opentrons_flex_96_tiprack_50ul', slot, '50uL tips')
                                for slot in tipbox_slot]
                                
     p1k_96 = ctx.load_instrument('flex_96channel_1000')
 
-
-
-
     robot_api = ctx.robot
+
+    def pick_up(tip):
+        nonlocal tips_200
+        nonlocal tips_50
+
+        if tip == tips_50:
+            p1k_96.configure_nozzle_layout(
+                style=ROW,
+                start="A1",
+                tip_racks=[tips_50]
+            )
+            p1k_96.tip_racks = tips_50
+        else:
+            p1k_96.configure_nozzle_layout(
+                style=ROW,
+                start="A1",
+                tip_racks=[tips_200]
+            )
+            p1k_96.tip_racks = [tips_200]
+
+        p1k_96.pick_up_tip()
+
 
     def process_resin_tips(wait, s=1):
 
@@ -268,66 +287,60 @@ def run(ctx):
 
     # rinsing w/ 20 uL
 
-    # if slot_rinse != -1 and labware_rinse != '':
-    #     p1k_96.tip_racks = tips_50
-    #     p1k_96.pick_up_tip()     
+    if slot_rinse != -1 and labware_rinse != '':
+        p1k_96.tip_racks = tips_50
+        p1k_96.pick_up_tip()     
 
-    #     p1k_96.flow_rate.aspirate = 20
-    #     p1k_96.flow_rate.dispense = 5
+        p1k_96.flow_rate.aspirate = 20
+        p1k_96.flow_rate.dispense = 5
 
-    #     p1k_96.aspirate(20, sol_b.bottom(z=2))
-    #     ctx.delay(seconds=1)
+        p1k_96.aspirate(20, sol_b.bottom(z=2))
+        ctx.delay(seconds=1)
 
-    #     p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
+        p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
 
-    #     if test: ctx.pause('')
+        if test: ctx.pause('')
 
-    #     p1k_96.dispense(20, evotip.top(z=EVOSEP_TEMPORARY_OFFSET-37), push_out=0)  
-    #     ctx.delay(seconds=1)
-    #     p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET-30), speed=0.5) 
-    #     p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET+5)) 
+        p1k_96.dispense(20, evotip.top(z=EVOSEP_TEMPORARY_OFFSET-37), push_out=0)  
+        ctx.delay(seconds=1)
+        p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET-30), speed=0.5) 
+        p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET+5)) 
 
-    #     if test: ctx.pause('') 
+        if test: ctx.pause('') 
 
-    #     if test: 
-    #         p1k_96.return_tip()   
-    #     else:
-    #         if type_dumpster == 3: p1k_96.return_tip()
-    #         else: p1k_96.drop_tip()    
+        if test: 
+            p1k_96.return_tip()   
+        else:
+            if type_dumpster == 3: p1k_96.return_tip()
+            else: p1k_96.drop_tip()    
 
 
-    #     # soaking tips 
+        # soaking tips 
 
-    #     ctx.move_labware(labware=evosep_tips_labware,
-    #                     new_location=soak_plate,
-    #                     use_gripper=True,
-    #                     pick_up_offset={'x':0, 'y':0, 'z':0},
-    #                     drop_offset={'x':0,'y':0,'z':0}
-    #                     ) 
+        ctx.move_labware(labware=evosep_tips_labware,
+                        new_location=soak_plate,
+                        use_gripper=True,
+                        pick_up_offset={'x':0, 'y':0, 'z':0},
+                        drop_offset={'x':0,'y':0,'z':0}
+                        ) 
         
-    #     if test: ctx.pause(' ')
-    #     else: ctx.delay(seconds=time_soaking)
+        if test: ctx.pause(' ')
+        else: ctx.delay(seconds=time_soaking)
 
-    #     ctx.move_labware(labware=evosep_tips_labware, 
-    #                     new_location=evotips_adapter, 
-    #                     use_gripper=True
-    #                     )
+        ctx.move_labware(labware=evosep_tips_labware, 
+                        new_location=evotips_adapter, 
+                        use_gripper=True
+                        )
         
 
-    #     # sealing tips/applying pressure/unsealing tips
+        # sealing tips/applying pressure/unsealing tips
 
-    #     process_resin_tips(DELAY_RINSE, 0)  
+        process_resin_tips(DELAY_RINSE, 0)  
 
 
     #### adding 15 uL and then 20 uL
-    p1k_96.configure_nozzle_layout(
-        style=ROW,
-        start="A1",
-        tip_racks=[tips_50]
-    )
 
-    p1k_96.tip_racks = tips_50
-    p1k_96.pick_up_tip()
+    pick_up(tips_50)
 
     p1k_96.flow_rate.aspirate = 6
     p1k_96.flow_rate.dispense = 6
@@ -350,80 +363,79 @@ def run(ctx):
         if type_dumpster == 3: p1k_96.return_tip()
         else: p1k_96.drop_tip()
 
-    # if test: ctx.pause('')
+    if test: ctx.pause('')
 
     
-    # p1k_96.pick_up_tip()
+    pick_up(tips_50)
 
-    # p1k_96.aspirate(20, sample.bottom(z=1))
-    # ctx.delay(seconds=1)
+    p1k_96.aspirate(20, sample.bottom(z=1))
+    ctx.delay(seconds=1)
 
-    # p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
+    p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
 
-    # p1k_96.dispense(20, evotip.top(z=EVOSEP_TEMPORARY_OFFSET-30), push_out=0)  ## -27
-    # ctx.delay(seconds=1)
-    # p1k_96.move_to(evotip.top(EVOSEP_TEMPORARY_OFFSET-25), speed=2)  ## -22
-    # p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET+5))
+    p1k_96.dispense(20, evotip.top(z=EVOSEP_TEMPORARY_OFFSET-30), push_out=0)  ## -27
+    ctx.delay(seconds=1)
+    p1k_96.move_to(evotip.top(EVOSEP_TEMPORARY_OFFSET-25), speed=2)  ## -22
+    p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET+5))
 
-    # if test: 
-    #     p1k_96.return_tip()   
-    # else:
-    #     if type_dumpster == 3: p1k_96.return_tip()
-    #     else: p1k_96.drop_tip()
+    if test: 
+        p1k_96.return_tip()   
+    else:
+        if type_dumpster == 3: p1k_96.return_tip()
+        else: p1k_96.drop_tip()
 
-    # if test: ctx.pause('')
-
-
-    # #### adding 150 uL
-
-    # H = 20
-    # D = 1
-
-    # p1k_96.tip_racks = [tips_200]
-    # p1k_96.pick_up_tip()
-
-    # p1k_96.flow_rate.aspirate = 200
-    # p1k_96.aspirate(150, sol_a.bottom(z=2))
-    # ctx.delay(seconds=1)
-
-    # p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
-
-    # p1k_96.flow_rate.dispense = 1
-    # p1k_96.dispense(50, evotip.top(z=EVOSEP_TEMPORARY_OFFSET-H).move(Point(x=-D, y=D)))
-    # p1k_96.flow_rate.dispense = 4
-    # p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET-H).move(Point(x=0)), speed=5)
-    # p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET-H+5).move(Point(x=0)), speed=5)
-    # p1k_96.dispense(100, evotip.top(z=EVOSEP_TEMPORARY_OFFSET-H+5).move(Point(x=0)))
-    # ctx.delay(seconds=1)
-
-    # p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
-
-    # if test: 
-    #     p1k_96.return_tip()   
-    # else:
-    #     if type_dumpster == 3: p1k_96.return_tip()
-    #     else: p1k_96.drop_tip()
-
-    # if test: ctx.pause('')
+    if test: ctx.pause('')
 
 
-    # # soaking tips 
+    #### adding 150 uL
 
-    # ctx.move_labware(labware=evosep_tips_labware,
-    #                  new_location=soak_plate,
-    #                  use_gripper=True
-    #                 ) 
+    H = 20
+    D = 1
+
+    pick_up(tips_200)
+
+    p1k_96.flow_rate.aspirate = 200
+    p1k_96.aspirate(150, sol_a.bottom(z=2))
+    ctx.delay(seconds=1)
+
+    p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
+
+    p1k_96.flow_rate.dispense = 1
+    p1k_96.dispense(50, evotip.top(z=EVOSEP_TEMPORARY_OFFSET-H).move(Point(x=-D, y=D)))
+    p1k_96.flow_rate.dispense = 4
+    p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET-H).move(Point(x=0)), speed=5)
+    p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET-H+5).move(Point(x=0)), speed=5)
+    p1k_96.dispense(100, evotip.top(z=EVOSEP_TEMPORARY_OFFSET-H+5).move(Point(x=0)))
+    ctx.delay(seconds=1)
+
+    p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
+
+    if test: 
+        p1k_96.return_tip()   
+    else:
+        if type_dumpster == 3: p1k_96.return_tip()
+        else: p1k_96.drop_tip()
+
+    if test: ctx.pause('')
+
+
+    # soaking tips 
+
+    ctx.move_labware(labware=evosep_tips_labware,
+                     new_location=soak_plate,
+                     use_gripper=True
+                    ) 
        
-    # if test: ctx.pause(' ')
-    # else: ctx.delay(seconds=time_soaking)
+    if test: ctx.pause(' ')
+    else: ctx.delay(seconds=time_soaking)
 
-    # ctx.move_labware(labware=evosep_tips_labware, 
-    #                  new_location=evotips_adapter, 
-    #                  use_gripper=True
-    #                 )
+    ctx.move_labware(labware=evosep_tips_labware, 
+                     new_location=evotips_adapter, 
+                     use_gripper=True
+                    )
 
 
-    # # sealing tips/applying pressure/unsealing tips
+    # sealing tips/applying pressure/unsealing tips
 
-    # process_resin_tips(DELAY)
+    process_resin_tips(DELAY)
 
