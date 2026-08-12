@@ -1,5 +1,7 @@
 from opentrons.types import AxisType, Point
 from opentrons.protocol_api import DISPENSE_ACTION, PLUNGER_TOP
+from opentrons.protocol_api import ROW, ALL
+
 
 
 metadata = {
@@ -10,7 +12,7 @@ metadata = {
 
 requirements = {
     "robotType": "Flex",
-    "apiLevel": "2.24",
+    "apiLevel": "2.28",
 }
 
 def add_parameters(parameters):
@@ -185,11 +187,11 @@ def run(ctx):
     else:
         tipbox_slot = ['A1', 'A2']
 
-    tips_200 = ctx.load_labware('opentrons_flex_96_tiprack_200ul', 'C3', '200uL tips', adapter='opentrons_flex_96_tiprack_adapter')
-    tips_50 = [ctx.load_labware('opentrons_flex_96_tiprack_50ul', slot, '50uL tips', adapter='opentrons_flex_96_tiprack_adapter')
+    tips_200 = ctx.load_labware('opentrons_flex_96_tiprack_200ul', 'C3', '200uL tips')
+    tips_50 = [ctx.load_labware('opentrons_flex_96_tiprack_50ul', slot, '50uL tips')
                                for slot in tipbox_slot]
                                
-    p1k_96 = ctx.load_instrument('flex_96channel_1000') 
+    p1k_96 = ctx.load_instrument('flex_96channel_1000')
 
 
 
@@ -304,9 +306,14 @@ def run(ctx):
 
 
     #### adding 15 uL and then 20 uL
+    p1k_96.configure_nozzle_layout(
+        style=ROW,
+        start="A1",
+        tip_racks=[tips_50]
+    )
 
     p1k_96.tip_racks = tips_50
-    p1k_96.pick_up_tip()
+    p1k_96.pick_up_tip(tips_50[0]["H1"])
 
     p1k_96.flow_rate.aspirate = 6
     p1k_96.flow_rate.dispense = 6
