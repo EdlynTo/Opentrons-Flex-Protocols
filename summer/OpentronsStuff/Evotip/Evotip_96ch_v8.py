@@ -66,7 +66,7 @@ def add_parameters(parameters):
     parameters.add_str(variable_name="labware_rinse",
                        display_name="Solvent B Labware",
                        description="If rinsing Evotips with Solvent B......",
-                       default='',
+                       default='nest_1_reservoir_195ml',
                        choices=[
                                {"display_name": "N/A", "value": ''},
                                {"display_name": "195mL Reservoir", "value": 'nest_1_reservoir_195ml'},
@@ -76,7 +76,7 @@ def add_parameters(parameters):
     parameters.add_int(variable_name="slot_rinse",
                        display_name="Solvent B Location",
                        description="If rinsing Evotips with Solvent B......",
-                       default=-1,
+                       default=1,
                        choices=[
                                {"display_name": "N/A", "value": -1},
                                {"display_name": "Slot A1", "value": 0},
