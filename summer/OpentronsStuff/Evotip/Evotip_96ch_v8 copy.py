@@ -21,6 +21,20 @@ def add_parameters(parameters):
                         description=("Protocol paused at several check points "),
                         default=True
                        )
+    
+    parameters.add_int(
+        display_name="How many rows to run?",
+        variable_name="rows",
+        default=3,minimum=1,maximum=8,
+        description="Select total rows to run. # of samples / 12")
+
+    parameters.add_int(
+        display_name="Empty rows",
+        variable_name="skip",
+        description="Select the number of empty tip rows there are, if any.",
+        default=0,minimum=0,maximum=7,
+        )
+    
     parameters.add_str(variable_name="labware_sample",
                        display_name="Sample Labware",
                        description=" ",
@@ -313,7 +327,7 @@ def run(ctx):
     )
 
     p1k_96.tip_racks = tips_50
-    p1k_96.pick_up_tip(tips_50[0]["H1"])
+    p1k_96.pick_up_tip()
 
     p1k_96.flow_rate.aspirate = 6
     p1k_96.flow_rate.dispense = 6
