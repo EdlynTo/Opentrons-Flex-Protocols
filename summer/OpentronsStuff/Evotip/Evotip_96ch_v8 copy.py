@@ -60,9 +60,9 @@ def add_parameters(parameters):
     parameters.add_str(variable_name="labware_solvent",
                        display_name="Solvent A Labware",
                        description=" ",
-                       default='nest_1_reservoir_195ml',
+                       default='nest_8_reservoir_22ml',
                        choices=[
-                               {"display_name": "195mL Reservoir", "value": 'nest_1_reservoir_195ml'},
+                               {"display_name": "195mL Reservoir", "value": 'nest_8_reservoir_22ml'},
                                {"display_name": "500µL 96-Well Plate ", "value": 'eppendorf_96_wellplate_500ul_lobind'}
                                ]
                       )
@@ -82,17 +82,17 @@ def add_parameters(parameters):
     parameters.add_str(variable_name="labware_rinse",
                        display_name="Solvent B Labware",
                        description="If rinsing Evotips with Solvent B......",
-                       default='',
+                       default='nest_8_reservoir_22ml',
                        choices=[
                                {"display_name": "N/A", "value": ''},
                                {"display_name": "195mL Reservoir", "value": 'nest_1_reservoir_195ml'},
-                               {"display_name": "500µL 96-Well Plate ", "value": 'eppendorfdeepwellplate96500l_96_wellplate_500ul'}
+                               {"display_name": "22mL NEST 8 reservoir", "value": 'nest_8_reservoir_22ml'}
                                ]
                       )
     parameters.add_int(variable_name="slot_rinse",
                        display_name="Solvent B Location",
                        description="If rinsing Evotips with Solvent B......",
-                       default=-1,
+                       default=2,
                        choices=[
                                {"display_name": "N/A", "value": -1},
                                {"display_name": "Slot A1", "value": 0},
@@ -183,7 +183,6 @@ def run(ctx):
 
     if slot_rinse != -1 and labware_rinse != '':
         sol_b_plate = ctx.load_labware(labware_rinse, open_slot[slot_rinse], 'Solvent B')
-        sol_b = sol_b_plate.wells()[0]
 
     soak_plate = ctx.load_adapter('ev_resin_tips_flex_short_adapter', open_slot[slot_soaking])
 
@@ -196,14 +195,13 @@ def run(ctx):
     evotip = evosep_tips_labware.wells()[0]
 
 
-    if slot_rinse != -1 and labware_rinse != '':
-        tipbox_slot = ['A1', 'A2', 'C3']
-    else:
-        tipbox_slot = ['A1', 'A2']
+    tipbox_slot = ['A1', 'A2']
 
     tips_200 = ctx.load_labware('opentrons_flex_96_tiprack_200ul', 'A3', '200uL tips')
     tips_50 = [ctx.load_labware('opentrons_flex_96_tiprack_50ul', slot, '50uL tips')
                                for slot in tipbox_slot]
+    if slot_rinse != -1 and labware_rinse != '':
+        rinse_tips_50 = ctx.load_labware('opentrons_flex_96_tiprack_50ul', 'C3', 'Rinse 50uL tips')
                                
     p1k_96 = ctx.load_instrument('flex_96channel_1000')
 
@@ -212,6 +210,16 @@ def run(ctx):
     def pick_up(tip):
         nonlocal tips_200
         nonlocal tips_50
+        nonlocal rinse_tips_50
+
+        if slot_rinse != -1 and labware_rinse != '':
+            if tip == rinse_tips_50:
+                p1k_96.configure_nozzle_layout(
+                    style=ROW,
+                    start="H1",
+                    tip_racks=[rinse_tips_50]
+                )
+                p1k_96.tip_racks = [rinse_tips_50]
 
         if tip == tips_50:
             p1k_96.configure_nozzle_layout(
@@ -220,7 +228,7 @@ def run(ctx):
                 tip_racks=[tips_50]
             )
             p1k_96.tip_racks = tips_50
-        else:
+        elif tip == tips_200:
             p1k_96.configure_nozzle_layout(
                 style=ROW,
                 start="A1",
@@ -288,13 +296,12 @@ def run(ctx):
     # rinsing w/ 20 uL
 
     if slot_rinse != -1 and labware_rinse != '':
-        p1k_96.tip_racks = tips_50
-        p1k_96.pick_up_tip()     
+        pick_up(rinse_tips_50)     
 
         p1k_96.flow_rate.aspirate = 20
         p1k_96.flow_rate.dispense = 5
 
-        p1k_96.aspirate(20, sol_b.bottom(z=2))
+        p1k_96.aspirate(20, sol_b_plate["H1"].bottom(z=2).move(Point(x=-49.5, y=0, z=0)))
         ctx.delay(seconds=1)
 
         p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
@@ -335,7 +342,7 @@ def run(ctx):
 
         # sealing tips/applying pressure/unsealing tips
 
-        process_resin_tips(DELAY_RINSE, 0)  
+        process_resin_tips(DELAY_RINSE, 0)
 
 
     #### adding 15 uL and then 20 uL
@@ -345,7 +352,10 @@ def run(ctx):
     p1k_96.flow_rate.aspirate = 6
     p1k_96.flow_rate.dispense = 6
 
-    p1k_96.aspirate(15, sol_a.bottom(z=2))
+    # p1k_96.aspirate(15, sol_a.bottom(z=2))
+    p1k_96.aspirate(15, sol_a_plate["A1"].bottom(z=2).move(Point(x=-49.5, y=0, z=0)))
+    # p1k_96.aspirate(15, sol_a_plate["A1"])
+
     ctx.delay(seconds=1)
 
     p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
