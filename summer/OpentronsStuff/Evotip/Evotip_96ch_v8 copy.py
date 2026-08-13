@@ -407,7 +407,7 @@ def run(ctx):
 
     p1k_96.flow_rate.aspirate = 200
     # p1k_96.aspirate(150, sol_a.bottom(z=2))
-    p1k_96.aspirate(15, sol_a_plate["A1"].bottom(z=2).move(Point(x=-49.5, y=0, z=0)))
+    p1k_96.aspirate(150, sol_a_plate["A1"].bottom(z=2).move(Point(x=-49.5, y=0, z=0)))
     ctx.delay(seconds=1)
 
     p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
