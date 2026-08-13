@@ -241,6 +241,7 @@ def run(ctx):
 
     def process_resin_tips(wait, s=1):
 
+        p1k_96.configure_nozzle_layout(style=ALL)
         p1k_96.move_to(evotip.top(0))
 
         move_pip_to_bot = robot_api.plunger_coordinates_for_named_position("left", PLUNGER_TOP)
@@ -405,7 +406,8 @@ def run(ctx):
     pick_up(tips_200)
 
     p1k_96.flow_rate.aspirate = 200
-    p1k_96.aspirate(150, sol_a.bottom(z=2))
+    # p1k_96.aspirate(150, sol_a.bottom(z=2))
+    p1k_96.aspirate(15, sol_a_plate["A1"].bottom(z=2).move(Point(x=-49.5, y=0, z=0)))
     ctx.delay(seconds=1)
 
     p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
