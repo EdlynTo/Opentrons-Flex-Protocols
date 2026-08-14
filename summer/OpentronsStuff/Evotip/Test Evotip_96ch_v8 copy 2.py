@@ -28,12 +28,12 @@ def add_parameters(parameters):
         default=3,minimum=1,maximum=8,
         description="Select total rows to run. # of samples / 12")
 
-    parameters.add_int(
-        display_name="Empty rows",
-        variable_name="skip",
-        description="Select the number of empty tip rows there are, if any.",
-        default=0,minimum=0,maximum=7,
-        )
+    # parameters.add_int(
+    #     display_name="Empty rows",
+    #     variable_name="skip",
+    #     description="Select the number of empty tip rows there are, if any.",
+    #     default=0,minimum=0,maximum=7,
+    #     )
     
     parameters.add_str(variable_name="labware_sample",
                        display_name="Sample Labware",
@@ -92,7 +92,7 @@ def add_parameters(parameters):
     parameters.add_int(variable_name="slot_rinse",
                        display_name="Solvent B Location",
                        description="If rinsing Evotips with Solvent B......",
-                       default=2,
+                       default=-1,
                        choices=[
                                {"display_name": "N/A", "value": -1},
                                {"display_name": "Slot A1", "value": 0},
@@ -167,6 +167,7 @@ def run(ctx):
     slot_soaking = ctx.params.slot_soaking
     # vol_extra = ctx.params.vol_extra
     type_dumpster= ctx.params.type_dumpster
+    rows = ctx.params.rows
 
 
     if test: h_tip_in_well = 3
@@ -231,6 +232,7 @@ def run(ctx):
                 tip_racks=[tips_50]
             )
             p1k_96.tip_racks = tips_50
+
         elif tip == tips_200:
             p1k_96.configure_nozzle_layout(
                 style=ROW,
@@ -244,10 +246,11 @@ def run(ctx):
 
     # For testing purposes only, returns tips
     row_drop = 0
+    row_letters = "ABCDEFGH"
     def drop_return_tip():
         nonlocal row_drop
-        rows = "ABCDEFGH"
-        p1k_96.drop_tip(used_tips[f"{rows[row_drop]}1"])
+        nonlocal row_letters
+        p1k_96.drop_tip(used_tips[f"{row_letters[row_drop]}1"])
         row_drop += 1
 
 
@@ -314,17 +317,18 @@ def run(ctx):
         p1k_96.flow_rate.aspirate = 20
         p1k_96.flow_rate.dispense = 5
 
-        p1k_96.aspirate(20, sol_b_plate["H1"].bottom(z=2).move(Point(x=-49.5, y=0, z=0)))
-        ctx.delay(seconds=1)
+        for i in range(rows):
+            p1k_96.aspirate(20, sol_b_plate["H1"].bottom(z=2).move(Point(x=-49.5)))
+            ctx.delay(seconds=1)
 
-        p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
+            p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET))
 
-        if test: ctx.pause('')
+            if test: ctx.pause('')
 
-        p1k_96.dispense(20, evotip.top(z=EVOSEP_TEMPORARY_OFFSET-37), push_out=0)  
-        ctx.delay(seconds=1)
-        p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET-30), speed=0.5) 
-        p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET+5)) 
+            p1k_96.dispense(20, evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET-37), push_out=0)  
+            ctx.delay(seconds=1)
+            p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET-30), speed=0.5) 
+            p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET+5)) 
 
         if test: ctx.pause('') 
 
@@ -361,23 +365,22 @@ def run(ctx):
 
     pick_up(tips_50)
 
-    p1k_96.flow_rate.aspirate = 6
-    p1k_96.flow_rate.dispense = 6
+    for i in range(rows):
+        p1k_96.flow_rate.aspirate = 6
+        p1k_96.flow_rate.dispense = 6
 
-    # p1k_96.aspirate(15, sol_a.bottom(z=2))
-    p1k_96.aspirate(15, sol_a_plate["A1"].bottom(z=2).move(Point(x=-49.5, y=0, z=0)))
-    # p1k_96.aspirate(15, sol_a_plate["A1"])
+        p1k_96.aspirate(15, sol_a_plate["A1"].bottom(z=2).move(Point(x=-49.5)))
 
-    ctx.delay(seconds=1)
+        ctx.delay(seconds=1)
 
-    p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
+        p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET))
 
-    if test: ctx.pause('')
+        if test: ctx.pause('')
 
-    p1k_96.dispense(15, evotip.top(z=EVOSEP_TEMPORARY_OFFSET-39), push_out=0)  ## -36
-    ctx.delay(seconds=1)
-    p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET-34), speed=0.5)  ## -31
-    p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET+5))
+        p1k_96.dispense(15, evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET-39), push_out=0)  ## -36
+        ctx.delay(seconds=1)
+        p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET-34), speed=0.5)  ## -31
+        p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET+5))
 
     if test:
         drop_return_tip()
@@ -387,24 +390,25 @@ def run(ctx):
 
     if test: ctx.pause('')
 
-    
-    pick_up(tips_50)
 
-    p1k_96.aspirate(20, sample.bottom(z=1))
-    ctx.delay(seconds=1)
+    for i in range(rows):
+        pick_up(tips_50)
 
-    p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
+        p1k_96.aspirate(20, sample_plate.wells_by_name()[f"{row_letters[i]}1"].bottom(z=1))
+        ctx.delay(seconds=1)
 
-    p1k_96.dispense(20, evotip.top(z=EVOSEP_TEMPORARY_OFFSET-30), push_out=0)  ## -27
-    ctx.delay(seconds=1)
-    p1k_96.move_to(evotip.top(EVOSEP_TEMPORARY_OFFSET-25), speed=2)  ## -22
-    p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET+5))
+        p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET))
 
-    if test: 
-        drop_return_tip()
-    else:
-        if type_dumpster == 3: p1k_96.return_tip()
-        else: p1k_96.drop_tip()
+        p1k_96.dispense(20, evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET-30), push_out=0)  ## -27
+        ctx.delay(seconds=1)
+        p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(EVOSEP_TEMPORARY_OFFSET-25), speed=2)  ## -22
+        p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET+5))
+
+        if test: 
+            drop_return_tip()
+        else:
+            if type_dumpster == 3: p1k_96.return_tip()
+            else: p1k_96.drop_tip()
 
     if test: ctx.pause('')
 
@@ -415,23 +419,26 @@ def run(ctx):
     D = 1
 
     pick_up(tips_200)
+    for i in range(rows):
+        p1k_96.flow_rate.aspirate = 200
+        # p1k_96.aspirate(150, sol_a.bottom(z=2))
+        p1k_96.aspirate(150, sol_a_plate["A1"].bottom(z=2).move(Point(x=-49.5)))
+        ctx.delay(seconds=1)
+        if test: ctx.pause(' ')
 
-    p1k_96.flow_rate.aspirate = 200
-    # p1k_96.aspirate(150, sol_a.bottom(z=2))
-    p1k_96.aspirate(150, sol_a_plate["A1"].bottom(z=2).move(Point(x=-49.5, y=0, z=0)))
-    ctx.delay(seconds=1)
+        p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET))
 
-    p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
+        p1k_96.flow_rate.dispense = 1
+        p1k_96.dispense(50, evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET-H).move(Point(x=-D, y=D)))
+        p1k_96.flow_rate.dispense = 4
+        p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET-H).move(Point(x=0)), speed=5)
+        p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET-H+5).move(Point(x=0)), speed=5)
+        p1k_96.dispense(100, evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET-H+5).move(Point(x=0)))
+        ctx.delay(seconds=1)
 
-    p1k_96.flow_rate.dispense = 1
-    p1k_96.dispense(50, evotip.top(z=EVOSEP_TEMPORARY_OFFSET-H).move(Point(x=-D, y=D)))
-    p1k_96.flow_rate.dispense = 4
-    p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET-H).move(Point(x=0)), speed=5)
-    p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET-H+5).move(Point(x=0)), speed=5)
-    p1k_96.dispense(100, evotip.top(z=EVOSEP_TEMPORARY_OFFSET-H+5).move(Point(x=0)))
-    ctx.delay(seconds=1)
+        p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET))
+        if test: ctx.pause(' ')
 
-    p1k_96.move_to(evotip.top(z=EVOSEP_TEMPORARY_OFFSET))
 
     if test: 
         drop_return_tip() 
