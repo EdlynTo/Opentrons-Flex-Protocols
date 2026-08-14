@@ -5,9 +5,9 @@ from opentrons.protocol_api import ROW, ALL
 
 
 metadata = {
-    'protocolName': 'Row Loop Test Sample Clean-up by Evotips',
-    'author': 'Opentrons',
-    'description': 'Testing steps for sample clean-up',
+    'protocolName': 'Sample Row Clean-up by Evotips',
+    'author': 'Opentrons / Edlyn',
+    'description': 'Used for less than 96 samples',
 }
 
 requirements = {
@@ -18,7 +18,7 @@ requirements = {
 def add_parameters(parameters):
     parameters.add_bool(variable_name="test",
                         display_name="Test Run",
-                        description=("Protocol paused at several check points "),
+                        description=("Protocol paused at several check points and tips returned to rack"),
                         default=True
                        )
     
@@ -92,7 +92,7 @@ def add_parameters(parameters):
     parameters.add_int(variable_name="slot_rinse",
                        display_name="Solvent B Location",
                        description="If rinsing Evotips with Solvent B......",
-                       default=-1,
+                       default=2,
                        choices=[
                                {"display_name": "N/A", "value": -1},
                                {"display_name": "Slot A1", "value": 0},
@@ -195,14 +195,14 @@ def run(ctx):
     evosep_tips_labware = evotips_adapter.load_labware('ev_resin_tips_flex_96_labware', 'Evotips')
     evotip = evosep_tips_labware.wells()[0]
 
-
-    tipbox_slot = ['A1', 'A2']
+    if slot_rinse != -1 and labware_rinse != '' and test == False and rows > 6:
+        tipbox_slot = ['A1', 'A2', 'C1']
+    else:
+        tipbox_slot = ['A1', 'A2']
 
     tips_200 = ctx.load_labware('opentrons_flex_96_tiprack_200ul', 'A3', '200uL tips')
     tips_50 = [ctx.load_labware('opentrons_flex_96_tiprack_50ul', slot, '50uL tips')
-                               for slot in tipbox_slot]
-    if slot_rinse != -1 and labware_rinse != '':
-        rinse_tips_50 = ctx.load_labware('opentrons_flex_96_tiprack_50ul', 'C3', 'Rinse 50uL tips')
+                               for slot in tipbox_slot]    
 
     used_tips = ctx.load_labware('opentrons_flex_96_filtertiprack_200ul', 'C1', label = 'Empty tip box for returning tips')
     used_tips.set_empty()
@@ -214,16 +214,6 @@ def run(ctx):
     def pick_up(tip):
         nonlocal tips_200
         nonlocal tips_50
-        nonlocal rinse_tips_50
-
-        if slot_rinse != -1 and labware_rinse != '':
-            if tip == rinse_tips_50:
-                p1k_96.configure_nozzle_layout(
-                    style=ROW,
-                    start="H1",
-                    tip_racks=[rinse_tips_50]
-                )
-                p1k_96.tip_racks = [rinse_tips_50]
 
         if tip == tips_50:
             p1k_96.configure_nozzle_layout(
@@ -312,13 +302,15 @@ def run(ctx):
     # rinsing w/ 20 uL
 
     if slot_rinse != -1 and labware_rinse != '':
-        pick_up(rinse_tips_50)     
+        pick_up(tips_50)     
 
         p1k_96.flow_rate.aspirate = 20
         p1k_96.flow_rate.dispense = 5
 
         for i in range(rows):
-            p1k_96.aspirate(20, sol_b_plate["H1"].bottom(z=2).move(Point(x=-49.5)))
+            p1k_96.prepare_to_aspirate()
+            p1k_96.move_to(sol_b_plate["A1"].bottom(z=2).move(Point(x=-49.5)))
+            p1k_96.aspirate(20)
             ctx.delay(seconds=1)
 
             p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET))
@@ -421,10 +413,10 @@ def run(ctx):
     pick_up(tips_200)
     for i in range(rows):
         p1k_96.flow_rate.aspirate = 200
-        # p1k_96.aspirate(150, sol_a.bottom(z=2))
-        p1k_96.aspirate(150, sol_a_plate["A1"].bottom(z=2).move(Point(x=-49.5)))
+        p1k_96.prepare_to_aspirate()
+        p1k_96.move_to(sol_a_plate["A1"].bottom(z=2).move(Point(x=-49.5)))
+        p1k_96.aspirate(150)
         ctx.delay(seconds=1)
-        if test: ctx.pause(' ')
 
         p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET))
 
@@ -437,7 +429,7 @@ def run(ctx):
         ctx.delay(seconds=1)
 
         p1k_96.move_to(evosep_tips_labware.wells_by_name()[f"{row_letters[i]}1"].top(z=EVOSEP_TEMPORARY_OFFSET))
-        if test: ctx.pause(' ')
+    if test: ctx.pause(' ')
 
 
     if test: 
